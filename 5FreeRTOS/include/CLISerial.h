@@ -86,6 +86,23 @@ typedef enum
 	ser115200
 } eBaud;
 
+//Òý½Å¶¨Òå
+/*******************************************************/
+#define USART2_CLK                          RCC_APB1Periph_USART2
+#define USART2_GPIO_CLK                     RCC_AHB1Periph_GPIOA
+#define USART2_GPIO_PORT                    GPIOA
+
+#define USART2_RX_PIN                       GPIO_Pin_3
+#define USART2_RX_AF                        GPIO_AF_USART2
+#define USART2_RX_SOURCE                    GPIO_PinSource3
+
+
+#define USART2_TX_PIN                       GPIO_Pin_2
+#define USART2_TX_AF                        GPIO_AF_USART2
+#define USART2_TX_SOURCE                    GPIO_PinSource2
+
+
+
 
 #define vUARTInterruptHandler USART2_IRQHandler
 

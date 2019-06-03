@@ -78,20 +78,20 @@ GPIO_InitTypeDef GPIO_InitStructure;
 	hardware. */
 	if( ( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
 	{
-    	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE); //使能GPIOA时钟
-    	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);//使能Usart2时钟
+    	RCC_AHB1PeriphClockCmd(USART2_GPIO_CLK,ENABLE); //使能GPIOA时钟
+    	RCC_APB1PeriphClockCmd(USART2_CLK,ENABLE);//使能Usart2时钟
      
     	//串口1对应引脚复用映射
-    	GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_USART2); //GPIOA2复用为USART2
-    	GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_USART2); //GPIOA3复用为USART2
+    	GPIO_PinAFConfig(USART2_GPIO_PORT,USART2_TX_SOURCE,USART2_TX_AF); //GPIOA2复用为USART2
+    	GPIO_PinAFConfig(USART2_GPIO_PORT,USART2_RX_SOURCE,USART2_RX_AF); //GPIOA3复用为USART2
     	
     	//Usart2端口配置
-    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3; //GPIOA9与GPIOA10
+    	GPIO_InitStructure.GPIO_Pin = USART2_TX_PIN | USART2_RX_PIN; //GPIOA9与GPIOA10
     	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
     	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;	//速度50MHz
     	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //推挽复用输出
     	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //上拉
-    	GPIO_Init(GPIOA,&GPIO_InitStructure); //初始化PA2，PA3
+    	GPIO_Init(USART2_GPIO_PORT,&GPIO_InitStructure); //初始化PA2，PA3
 
        //Usart2 初始化设置
     	USART_InitStructure.USART_BaudRate = ulWantedBaud;//波特率设置

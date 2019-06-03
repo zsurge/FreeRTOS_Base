@@ -25,7 +25,23 @@
 #include "stm32f4xx_conf.h"
 #include "stdarg.h"
 
-#define USART1MAXBUFFSIZE 128
+//Òý½Å¶¨Òå
+/*******************************************************/
+#define USART1_CLK                         RCC_APB2Periph_USART1
+#define USART1_GPIO_PORT                   GPIOA
+#define USART1_GPIO_CLK                    RCC_AHB1Periph_GPIOA
+
+#define USART1_RX_PIN                      GPIO_Pin_10
+#define USART1_RX_AF                       GPIO_AF_USART1
+#define USART1_RX_SOURCE                   GPIO_PinSource10
+
+#define USART1_TX_PIN                      GPIO_Pin_9
+#define USART1_TX_AF                       GPIO_AF_USART1
+#define USART1_TX_SOURCE                   GPIO_PinSource9
+
+
+
+#define USART1MAXBUFFSIZE 512
 
 
 void drv_Usart1Init (u32 BaudRate);
