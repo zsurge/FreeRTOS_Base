@@ -28,7 +28,7 @@
 
 #define USART2MAXBUFFSIZE 1024
 
-void drv_Usart2Init (u32 BaudRate);
+void drv_Usart2_Init (u32 BaudRate);
 void drv_Usart2SendString (const u8 *Buff);
 void drv_Usart2SendData (const u8 *Buff, u16 SendSize);
 void drv_Usart2RecvReset (void);

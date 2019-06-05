@@ -64,7 +64,7 @@ extern u16 FLASH_TYPE;					//定义W25QXX芯片型号
 
 #define FLASH_USE_MALLOC	0			//定义是否使用动态内存管理
 
-void drv_FlashInit( void );
+void drv_Flash_Init( void );
 
 u16  drv_FLASH_ReadID(void);  	    		//读取FLASH ID
 u8   drv_FLASH_ReadSR(void);        		//读取状态寄存器 

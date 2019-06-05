@@ -39,7 +39,7 @@ void drv_Usart2Init (u32 BaudRate);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart2Init (u32 BaudRate)
+void drv_Usart2_Init (u32 BaudRate)
 {
     //GPIO端口设置
 	GPIO_InitTypeDef GPIO_InitStructure;

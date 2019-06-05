@@ -42,13 +42,13 @@
 
 #define USART3MAXBUFFSIZE 1024
 
-void drv_usart3Init (u32 BaudRate);
-void drv_usart3SendString (const u8 *Buff);
-void drv_usart3SendData (const u8 *Buff, u16 SendSize);
-void drv_usart3RecvReset (void);
-u8 drv_usart3RecvOne (u8 *Str);
-u16 drv_usart3RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
-u8 drv_usart3Read(u8 *buf, u16 len);
+void drv_Usart3_Init (u32 BaudRate);
+void drv_Usart3_SendString (const u8 *Buff);
+void drv_Usart3_SendData (const u8 *Buff, u16 SendSize);
+void drv_Usart3_RecvReset (void);
+u8 drv_Usart3_RecvOne (u8 *Str);
+u16 drv_Usart3_RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
+u8 drv_Usart3_Read(u8 *buf, u16 len);
 
     
 #endif

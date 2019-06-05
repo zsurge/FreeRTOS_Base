@@ -33,7 +33,7 @@
 #ifdef EF_USING_IAP
 
 /* IAP section backup application section start address in flash */
-static uint32_t bak_app_start_addr = 0x010000;//从第65K开始
+static uint32_t bak_app_start_addr = 0x10000;//从第65K开始
 
 /**
  * Flash IAP function initialize.

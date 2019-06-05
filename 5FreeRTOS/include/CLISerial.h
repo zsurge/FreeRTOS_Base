@@ -28,6 +28,18 @@
 #ifndef __CLISERIAL_H
 #define __CLISERIAL_H
 
+/* Scheduler includes. */
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "semphr.h"
+
+/* Library includes. */
+#include "stm32f4xx_conf.h"
+#include "stdio.h"	
+#include "string.h"
+#include "stdarg.h"
+
+
 typedef void * xComPortHandle;
 
 typedef enum
@@ -113,6 +125,9 @@ signed portBASE_TYPE xSerialGetChar( xComPortHandle pxPort, signed char *pcRxedC
 signed portBASE_TYPE xSerialPutChar( xComPortHandle pxPort, signed char cOutChar, TickType_t xBlockTime );
 portBASE_TYPE xSerialWaitForSemaphore( xComPortHandle xPort );
 void vSerialClose( xComPortHandle xPort );
+
+void xUsart2Init (uint32_t BaudRate);
+
 
 #endif
 

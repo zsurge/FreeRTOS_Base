@@ -126,19 +126,19 @@ void test_env(void)
 
     c_old_boot_times = ef_get_env("p1");
     
-    UARTprintf("p1 = %s\r\n", c_old_boot_times);
+    printf("p1 = %s\r\n", c_old_boot_times);
 
     c_old_boot_times = ef_get_env("p2");
 
-    MY_DEBUG("p2 = %s\r\n", c_old_boot_times);
+    printf("p2 = %s\r\n", c_old_boot_times);
 
     c_old_boot_times = ef_get_env("p3");
 
-    MY_DEBUG("p3 = %s\r\n", c_old_boot_times);       
+    printf("p3 = %s\r\n", c_old_boot_times);       
 
     
 
-    MY_DEBUG("------------test_env end----------\r\n");
+    printf("------------test_env end----------\r\n");
     
     
 }

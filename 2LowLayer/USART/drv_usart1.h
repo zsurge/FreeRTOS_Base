@@ -20,11 +20,6 @@
 #ifndef __DRV_USART1_H
 #define __DRV_USART1_H
 
-#include "stdio.h"	
-#include "string.h"
-#include "stm32f4xx_conf.h"
-#include "stdarg.h"
-
 //引脚定义
 /*******************************************************/
 #define USART1_CLK                         RCC_APB2Periph_USART1
@@ -41,7 +36,20 @@
 
 
 
-#define USART1MAXBUFFSIZE 512
+#if 0
+
+#include "stdio.h"	
+#include "string.h"
+#include "stm32f4xx_conf.h"
+#include "stdarg.h"
+
+
+#define USART1MAXBUFFSIZE 1280 //需要做IAP升级，一包1024个字节
+
+extern volatile u8 USART1RecvBuf[USART1MAXBUFFSIZE];
+extern volatile u16 RecvTop1;
+extern volatile u16 RecvEnd1;
+
 
 
 void drv_Usart1Init (u32 BaudRate);
@@ -52,10 +60,13 @@ u8 drv_Usart1RecvOne (u8 *Str);
 u16 drv_Usart1RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
 u8 drv_Usart1Read(u8 *buf, u16 len);
 
-void UARTprintf(const uint8_t *pcString, ...);
+//void UARTprintf(const uint8_t *pcString, ...);
+#endif
 
 
-
+void drv_Usart1_Init(int BaudRate);
+void drv_Usart1_DMA_Send(uint8_t *buf, uint16_t len);
+uint8_t drv_Usart1_GetByte(void);
 
 
 

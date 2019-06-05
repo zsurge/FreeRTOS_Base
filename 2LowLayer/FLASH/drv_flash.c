@@ -98,7 +98,7 @@ u8 SPI1_ReadWriteByte(u8 TxData)
 
 
 /*****************************************************************************
- 函 数 名  : drv_FlashInit
+ 函 数 名  : drv_Flash_Init
  功能描述  : FLASH 初始化
  输入参数  : void
  输出参数  : 无
@@ -111,7 +111,7 @@ u8 SPI1_ReadWriteByte(u8 TxData)
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_FlashInit( void )
+void drv_Flash_Init( void )
 {
     //初始化SPI FLASH的IO口
     GPIO_InitTypeDef  GPIO_InitStructure;

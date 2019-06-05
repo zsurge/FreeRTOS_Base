@@ -39,7 +39,7 @@ void drv_Usart3Init (u32 BaudRate);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart3Init (u32 BaudRate)
+void drv_Usart3_Init (u32 BaudRate)
 {
     //GPIO端口设置
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -117,7 +117,7 @@ void USART3_IRQHandler (void)
 }
 
 
-void drv_Usart3SendOne (const u8 dat)
+void drv_Usart3_SendOne (const u8 dat)
 {
 	USART_SendData (USART3, dat);
 
@@ -143,11 +143,11 @@ void drv_Usart3SendString (const u8 *Buff);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart3SendString (const u8 *Buff)
+void drv_Usart3_SendString (const u8 *Buff)
 {
 	while (*Buff != 0)
 	{
-		drv_Usart3SendOne (*Buff);
+		drv_Usart3_SendOne (*Buff);
 		Buff++;
 	}    
 }
@@ -168,11 +168,11 @@ void drv_Usart3SendData (const u8 *Buff, u16 SendSize);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart3SendData (const u8 *Buff, u16 SendSize)
+void drv_Usart3_SendData (const u8 *Buff, u16 SendSize)
 {
 	while (SendSize != 0)
 	{
-		drv_Usart3SendOne (*Buff);
+		drv_Usart3_SendOne (*Buff);
 		Buff++;
 		SendSize--;
 	}
@@ -195,7 +195,7 @@ void drv_Usart3RecvReset (void);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart3RecvReset (void)
+void drv_Usart3_RecvReset (void)
 {
 	RecvTop3 = 0;
 	RecvEnd3 = 0;
@@ -219,7 +219,7 @@ u8 drv_Usart3RecvOne (u8 *Str);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-u8 drv_Usart3RecvOne (u8 *Str)
+u8 drv_Usart3_RecvOne (u8 *Str)
 {
 	if (RecvTop3 == RecvEnd3) return 0;//read nothing
 
@@ -250,7 +250,7 @@ u16 drv_Usart3RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-u16 drv_Usart3RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds)
+u16 drv_Usart3_RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds)
 {
 //	u16 RecvLen = 0;
 //	u8 tmp[1] = {0};
@@ -289,7 +289,7 @@ int dev_Usart2Read(unsigned char *buf, int len)
     修改内容   : 新生成函数
 
 *****************************************************************************/
-u8 drv_Usart3Read(u8 *Buff, u16 len)
+u8 drv_Usart3_Read(u8 *Buff, u16 len)
 {
 
 	u16 RecvLen = 0;
@@ -299,7 +299,7 @@ u8 drv_Usart3Read(u8 *Buff, u16 len)
 
 	while (len--)
 	{
-		if (drv_Usart3RecvOne (tmp) == 1)
+		if (drv_Usart3_RecvOne (tmp) == 1)
 		{
 			Buff[RecvLen++] = tmp[0];
 		}

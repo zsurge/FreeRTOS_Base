@@ -29,17 +29,10 @@
 	BASIC INTERRUPT DRIVEN SERIAL PORT DRIVER FOR UART0.
 */
 
-/* Scheduler includes. */
-#include "FreeRTOS.h"
-#include "queue.h"
-#include "semphr.h"
-
-/* Library includes. */
-#include "stm32f4xx_conf.h"
-
-
 /* Demo application includes. */
 #include "CLISerial.h"
+
+
 /*-----------------------------------------------------------*/
 
 /* Misc defines. */
@@ -60,6 +53,74 @@ void vUARTInterruptHandler( void );
 
 /*-----------------------------------------------------------*/
 
+
+#if 1
+#pragma import(__use_no_semihosting)             
+//标准库需要的支持函数                 
+struct __FILE 
+{ 
+	int handle; 
+}; 
+
+FILE __stdout;       
+//定义_sys_exit()以避免使用半主机模式    
+void _sys_exit(int x) 
+{ 
+	x = x; 
+} 
+//重定义fputc函数 
+int fputc(int ch, FILE *f)
+{ 	
+	while((USART2->SR&0X40)==0);//循环发送,直到发送完毕   
+	USART2->DR = (u8) ch;      
+	return ch;
+}
+#endif
+
+void xUsart2Init (uint32_t BaudRate)
+{
+    USART_InitTypeDef USART_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+     RCC_AHB1PeriphClockCmd(USART2_GPIO_CLK,ENABLE); //使能GPIOA时钟
+     RCC_APB1PeriphClockCmd(USART2_CLK,ENABLE);//使能Usart2时钟
+
+     //串口1对应引脚复用映射
+     GPIO_PinAFConfig(USART2_GPIO_PORT,USART2_TX_SOURCE,USART2_TX_AF); //GPIOA2复用为USART2
+     GPIO_PinAFConfig(USART2_GPIO_PORT,USART2_RX_SOURCE,USART2_RX_AF); //GPIOA3复用为USART2
+     
+     //Usart2端口配置
+     GPIO_InitStructure.GPIO_Pin = USART2_TX_PIN | USART2_RX_PIN; //GPIOA9与GPIOA10
+     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
+     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;   //速度50MHz
+     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //推挽复用输出
+     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //上拉
+     GPIO_Init(USART2_GPIO_PORT,&GPIO_InitStructure); //初始化PA2，PA3
+
+    //Usart2 初始化设置
+     USART_InitStructure.USART_BaudRate = BaudRate;//波特率设置
+     USART_InitStructure.USART_WordLength = USART_WordLength_8b;//字长为8位数据格式
+     USART_InitStructure.USART_StopBits = USART_StopBits_1;//一个停止位
+     USART_InitStructure.USART_Parity = USART_Parity_No;//无奇偶校验位
+     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
+     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx; //收发模式
+     USART_Init(USART2, &USART_InitStructure); //初始化串口2    
+
+     //Usart2 NVIC 配置
+     NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;//串口2中断通道
+     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=10;//抢占优先级3
+     NVIC_InitStructure.NVIC_IRQChannelSubPriority =5;       //子优先级3
+     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;         //IRQ通道使能
+     NVIC_Init(&NVIC_InitStructure); //根据指定的参数初始化VIC寄存器
+     
+     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);//开启相关中断    
+     
+     USART_Cmd(USART2, ENABLE);  //使能串口1     
+}
+
+
+
 /*
  * See the serial2.h header file.
  */
@@ -78,6 +139,8 @@ GPIO_InitTypeDef GPIO_InitStructure;
 	hardware. */
 	if( ( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
 	{
+        USART_DeInit(USART2);
+    
     	RCC_AHB1PeriphClockCmd(USART2_GPIO_CLK,ENABLE); //使能GPIOA时钟
     	RCC_APB1PeriphClockCmd(USART2_CLK,ENABLE);//使能Usart2时钟
      

@@ -95,6 +95,9 @@ const char *FreeRTOS_CLIGetParameter( const char *pcCommandString, UBaseType_t u
 
 extern void vUARTCommandConsoleStart( uint16_t usStackSize, UBaseType_t uxPriority );
 
+extern void xUsart2Init (uint32_t BaudRate);
+
+
 
 #endif /* COMMAND_INTERPRETER_H */
 
