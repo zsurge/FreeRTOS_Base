@@ -76,13 +76,6 @@ void vTaskMsgPro(void *pvParameters);
 void Key_task(void *pvParameters);
 
 
-#define SFUD_DEMO_TEST_BUFFER_SIZE 1024
-static void sfud_demo(void);
-static uint8_t sfud_demo_test_buf[SFUD_DEMO_TEST_BUFFER_SIZE];
-
-
-
-
 int main(void)
 { 
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);//设置系统中断优先级分组4
@@ -131,6 +124,7 @@ void start_task(void *pvParameters)
                 (void*          )NULL,				
                 (UBaseType_t    )LED0_TASK_PRIO,	
                 (TaskHandle_t*  )&LED0Task_Handler);   
+    
     //创建LED1任务
     xTaskCreate((TaskFunction_t )led1_task,     
                 (const char*    )"led1_task",   
@@ -208,7 +202,6 @@ void Key_task(void *pvParameters)
 	uint8_t ucKeyCode;
 	uint8_t pcWriteBuffer[500];
     
-#if V5 == 0
     while(1)
     {
 		ucKeyCode = drv_key_Scan(0);
@@ -231,15 +224,17 @@ void Key_task(void *pvParameters)
 				/* K2键按下，打印串口操作命令 */
 				case 2:
 					//FlashTest();
-					sfud_demo();
+					ReadIAP();
 					break;
 				case 3:
-					ef_print_env();
+					//ef_print_env();
+					SystemReset();
 					break;
 				case 4:
                     printf("KEY_DOWN_K4\r\n");
+                    ef_erase_bak_app( 0x10000 ); 
                     //RestoreDefaultSetting();
-                    IAP_DownLoadToFlash();
+                    //IAP_DownLoadToFlash();
 					break;                
 				
 				/* 其他的键值不处理 */
@@ -250,58 +245,8 @@ void Key_task(void *pvParameters)
 		}
 		
 		vTaskDelay(20);
-	}
-    
-    #else
-    
-    while(1)
-    {
-		ucKeyCode = drv_GetKey();
-		
-		if (ucKeyCode != KEY_NONE)
-		{
-			switch (ucKeyCode)
-			{
-				/* K1键按下 打印任务执行情况 */
-				case KEY_DOWN_K1:			 
-					printf("=================================================\r\n");
-					printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
-					vTaskList((char *)&pcWriteBuffer);
-					printf("%s\r\n", pcWriteBuffer);
-                    
-					printf("\r\n任务名       运行计数         使用率\r\n");
-					vTaskGetRunTimeStats((char *)&pcWriteBuffer);
-					printf("%s\r\n", pcWriteBuffer);
-					break;
+	}   
 
-				
-				/* K2键按下，打印串口操作命令 */
-				case KEY_DOWN_K2: 
-                    //FlashTest();
-                    sfud_demo();
-					break;
-				case KEY_DOWN_K3:
-                    ef_print_env();
-					break;
-				case KEY_DOWN_K4:
-                    
-                    printf("KEY_DOWN_K4\r\n");
-                    break;
-				case SYS_DOWN_K1K2:
-					printf("组合按键\r\n");    
-                    //RestoreDefaultSetting();
-					break;                
-				
-				/* 其他的键值不处理 */
-				default:                     
-					break;
-			}
-		}
-		
-		vTaskDelay(20);
-	}
-
-    #endif
 }
 
 
@@ -335,49 +280,6 @@ void vTaskMsgPro(void *pvParameters)
 		vTaskDelay(20);
     }
 }
-
-
-static void sfud_demo(void) {
-    sfud_err result = SFUD_SUCCESS;
-    const sfud_flash *flash = sfud_get_device_table() + 0;
-    size_t i;
-    uint32_t addr = 0x10000;
-    size_t size = SFUD_DEMO_TEST_BUFFER_SIZE;
-    size_t j = 0;
-
-    for(j=0;j<43;j++,addr+=SFUD_DEMO_TEST_BUFFER_SIZE)
-    {
-        
-        result = sfud_read(flash, addr, size, sfud_demo_test_buf);
-        if (result == SFUD_SUCCESS) 
-        {
-            printf("Read the %s flash data success. Start from 0x%08X, size is %ld. The data is:\r\n", flash->name, addr,
-                    size);
-            printf("Offset (h) 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\r\n");
-            for (i = 0; i < size; i++) 
-            {
-                if (i % 16 == 0) 
-                {
-                    printf("[%08X] ", addr + i);
-                }
-                printf("%02X ", sfud_demo_test_buf[i]);
-                if (((i + 1) % 16 == 0) || i == size - 1) 
-                {
-                    printf("\r\n");
-                }
-            }
-            printf("\r\n");
-        } 
-        else 
-        {
-            printf("Read the %s flash data failed.\r\n", flash->name);
-        }
-    }
-    if (i == size) {
-        printf("The %s flash test is success.\r\n", flash->name);
-    }
-}
-
 
 
 

@@ -22,7 +22,11 @@
 #include "easyflash.h"
 #include "sfud.h"
 
+void ReadIAP(void);
+
 void RestoreDefaultSetting(void);
+
+void SystemReset(void);
 
 
 #endif

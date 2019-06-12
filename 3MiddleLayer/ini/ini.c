@@ -22,21 +22,52 @@
  *----------------------------------------------*/
 #include "ini.h"
 
-//static const ef_env default_param[] = 
-//{
-//   {"boot_times","0"},
-//   {"device_id","1"},
-//   {"software version","v1.0.0.0"},
-//   {"hardware version","v1.0"},
-//   {"key1","key1_value"},
-//   {"key2","key2_value"},
-//   {"key3","key3_value"},
-//   {"key4","key4_value"},
-//   {"key5","key5_value"},
-//   {"key6","key6_value"},
-//   {"key7","key7_value"},
-//   {"key8","key8_value"}, 
-//};
+#define SFUD_DEMO_TEST_BUFFER_SIZE 1024
+
+static uint8_t sfud_demo_test_buf[SFUD_DEMO_TEST_BUFFER_SIZE];
+
+
+void ReadIAP(void) 
+{
+    sfud_err result = SFUD_SUCCESS;
+    const sfud_flash *flash = sfud_get_device_table() + 0;
+    size_t i;
+    uint32_t addr = 0x10000;
+    size_t size = SFUD_DEMO_TEST_BUFFER_SIZE;
+    size_t j = 0;
+
+    for(j=0;j<42;j++,addr+=SFUD_DEMO_TEST_BUFFER_SIZE)
+    {
+        
+        result = sfud_read(flash, addr, size, sfud_demo_test_buf);
+        if (result == SFUD_SUCCESS) 
+        {
+            printf("Read the %s flash data success. Start from 0x%08X, size is %ld. The data is:\r\n", flash->name, addr,
+                    size);
+            printf("Offset (h) 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\r\n");
+            for (i = 0; i < size; i++) 
+            {
+                if (i % 16 == 0) 
+                {
+                    printf("[%08X] ", addr + i);
+                }
+                printf("%02X ", sfud_demo_test_buf[i]);
+                if (((i + 1) % 16 == 0) || i == size - 1) 
+                {
+                    printf("\r\n");
+                }
+            }
+            printf("\r\n");
+        } 
+        else 
+        {
+            printf("Read the %s flash data failed.\r\n", flash->name);
+        }
+    }
+    if (i == size) {
+        printf("The %s flash test is success.\r\n", flash->name);
+    }
+}
 
 
 //#define param_start_addr 0x00
@@ -64,5 +95,16 @@ void RestoreDefaultSetting(void)
         printf("RestoreDefaultSetting success\r\n");
     }
     
+}
+
+void SystemReset(void)
+{
+    //写升级标志位
+    if(ef_set_env("UpgradeFlag","1") == EF_NO_ERR)
+    {
+        //jump iap
+        printf("jump iap\r\n");
+        NVIC_SystemReset();
+    }
 }
 
