@@ -33,7 +33,7 @@
  ******************************************************************************/
 #include "cmd_fun.h"
 #include "easyflash.h"
-
+#include "iap.h"
 
 /* CLI Command Structure define */
 static const CLI_Command_Definition_t CLI_Definition_All[] = {
@@ -117,6 +117,14 @@ static const CLI_Command_Definition_t CLI_Definition_All[] = {
         "resetenv",
         "\r\nresetenv:\r\n Restore default Settings \r\n\r\n",
         prvResetEnv,
+        0
+    },        
+
+    
+    {
+        "update",
+        "\r\nupdate:\r\n upgrade through ymodem \r\n\r\n",
+        prvUpDate,
         0
     },        
 
@@ -706,6 +714,32 @@ static BaseType_t prvResetEnv(char *pcWriteBuffer, size_t xWriteBufferLen, const
 }
 
 
+static BaseType_t prvUpDate(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString)
+{
+    int32_t filesize;
+    /* Remove compile time warnings about unused parameters, and check the
+    write buffer is not NULL.  NOTE - for simplicity, this example assumes the
+    write buffer length is adequate, so does not check for buffer overflows. */
+    ( void ) pcCommandString;
+    ( void ) xWriteBufferLen;
+    configASSERT( pcWriteBuffer );
+    
+    filesize = IAP_DownLoadToFlash();
+
+    if (filesize > 0)
+	{
+        strcat( pcWriteBuffer, "Update Completed Successfully! \r\n" );
+	}
+    else
+    {
+        strcat( pcWriteBuffer, "Update error,try again!\r\n");  
+    } 
+    
+	/* There is no more data to return after this single string, so return pdFALSE. */	
+
+    return pdFALSE;
+    
+}
 
 
 

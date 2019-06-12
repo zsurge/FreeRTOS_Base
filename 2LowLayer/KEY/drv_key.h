@@ -22,9 +22,9 @@
 #include "sys.h" 
 #include "delay.h"
 
-#define V5 0
+#define KEYFIFO     (0)
 
-#if V5 == 0
+#if KEYFIFO == 0
 #define KEY0 		PEin(4)   	//PE4
 #define KEY1 		PEin(3)		//PE3 
 #define KEY2 		PEin(2)		//P32

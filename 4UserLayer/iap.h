@@ -40,12 +40,14 @@
  *----------------------------------------------*/
 extern uint8_t buf_1k[1024];
 
+
 /*----------------------------------------------*
  * 内部函数原型说明                             *
  *----------------------------------------------*/
 
 void IAP_JumpToApplication(void);
-void IAP_DownLoadToFlash(void);
+int32_t IAP_DownLoadToFlash(void);
+int32_t IAP_DownLoadToSTMFlash(void);
 
 
 

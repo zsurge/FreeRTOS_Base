@@ -36,7 +36,7 @@
  *----------------------------------------------*/
 
 uint8_t FileName[FILE_NAME_LENGTH] = {0};
-static uint32_t update_file_total_size;
+static uint32_t update_file_cur_size;
 
 /*----------------------------------------------*
  * 内部函数原型说明                             *
@@ -269,7 +269,7 @@ int32_t Ymodem_Receive ( uint8_t* buf, uint32_t appaddr )
 //                                    //ramsource = ( uint32_t ) buf_ptr; //直接写内部FLASH需要，但是外部FLASH不需要
 
 									/* Write received data in Flash */
-                                    if(ef_write_data_to_bak(buf_ptr, packet_length,&update_file_total_size,size) == EF_NO_ERR)                           
+                                    if(ef_write_data_to_bak(buf_ptr, packet_length,&update_file_cur_size,size) == EF_NO_ERR)                           
 //    								if ( STM_FLASH_Write ( &flashdestination, ( uint32_t* ) ramsource, ( uint16_t ) packet_length/4 )  == 0 ) //直接写片内FLASH
 									{
 										Send_Byte ( ACK );

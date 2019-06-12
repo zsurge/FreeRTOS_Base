@@ -122,6 +122,11 @@ static BaseType_t prvDelEnv(char *pcWriteBuffer, size_t xWriteBufferLen, const c
 static BaseType_t prvResetEnv(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
 
 
+//IAPÉý¼¶
+static BaseType_t prvUpDate(char *pcWriteBuffer, size_t xWriteBufferLen, const char *pcCommandString);
+
+
+
 
 
 

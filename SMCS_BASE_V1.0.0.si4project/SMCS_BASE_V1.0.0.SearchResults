@@ -1,4 +1,0 @@
----- ef_print_env Matches (3 in 2 files) ----
-easyflash.h (E:\Work\4.SmartMotorControlSystem\2.src\SMCS_BASE\3MiddleLayer\easyflash\inc) line 106 : void ef_print_env(void);
-Key_task in main.c (E:\Work\4.SmartMotorControlSystem\2.src\SMCS_BASE\4UserLayer) : 					ef_print_env();
-Key_task in main.c (E:\Work\4.SmartMotorControlSystem\2.src\SMCS_BASE\4UserLayer) :                     ef_print_env();

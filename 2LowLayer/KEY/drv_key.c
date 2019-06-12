@@ -20,7 +20,7 @@
 #include "drv_key.h"
 
 
-#if V5 == 0
+#if KEYFIFO == 0
 //按键初始化函数
 void drv_key_Init(void)
 {

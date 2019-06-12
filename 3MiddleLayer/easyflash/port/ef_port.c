@@ -45,6 +45,8 @@ static const ef_env default_env_set[] =
    {"device_id","1"},
    {"software version",SF_VERSION},
    {"hardware version",HD_VERSION},
+   {"UpgradeFlag","0"},
+   {"UserAPPFlag","0"},    
    {"key1","key1_value"},
    {"key2","key2_value"},
    {"key3","key3_value"},
