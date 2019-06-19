@@ -19,7 +19,8 @@
 #include "stm32f4xx_conf.h"
 #include "drv_usart1.h"
 
-#if 0
+#ifndef IAP_TEST
+
 volatile u8 USART1RecvBuf[USART1MAXBUFFSIZE] = {0};
 volatile u16 RecvTop1 = 0;
 volatile u16 RecvEnd1 = 0;
@@ -38,7 +39,7 @@ void drv_Usart1Init (u32 BaudRate);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart1Init (u32 BaudRate)
+void drv_Usart1_Init (u32 BaudRate)
 {
     //GPIO端口设置
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -116,7 +117,7 @@ void USART1_IRQHandler (void)
 }
 
 
-void drv_Usart1SendOne (const u8 dat)
+void drv_Usart1_SendOne (const u8 dat)
 {
 	USART_SendData (USART1, dat);
 
@@ -142,11 +143,11 @@ void drv_Usart1SendString (const u8 *Buff);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart1SendString (const u8 *Buff)
+void drv_Usart1_SendString (const u8 *Buff)
 {
 	while (*Buff != 0)
 	{
-		drv_Usart1SendOne (*Buff);
+		drv_Usart1_SendOne (*Buff);
 		Buff++;
 	}    
 }
@@ -167,11 +168,11 @@ void drv_Usart1SendData (const u8 *Buff, u16 SendSize);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart1SendData (const u8 *Buff, u16 SendSize)
+void drv_Usart1_SendData (const u8 *Buff, u16 SendSize)
 {
 	while (SendSize != 0)
 	{
-		drv_Usart1SendOne (*Buff);
+		drv_Usart1_SendOne (*Buff);
 		Buff++;
 		SendSize--;
 	}
@@ -194,7 +195,7 @@ void drv_Usart1RecvReset (void);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-void drv_Usart1RecvReset (void)
+void drv_Usart1_RecvReset (void)
 {
 	RecvTop1 = 0;
 	RecvEnd1 = 0;
@@ -218,7 +219,7 @@ u8 drv_Usart1RecvOne (u8 *Str);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-u8 drv_Usart1RecvOne (u8 *Str)
+u8 drv_Usart1_RecvOne (u8 *Str)
 {
 	if (RecvTop1 == RecvEnd1) return 0;//read nothing
 
@@ -249,7 +250,7 @@ u16 drv_USART1RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
     修改内容   : 新生成函数
 
 *****************************************************************************/
-u16 drv_Usart1RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds)
+u16 drv_Usart1_RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds)
 {
 //	u16 RecvLen = 0;
 //	u8 tmp[1] = {0};
@@ -288,7 +289,7 @@ int dev_Usart1Read(unsigned char *buf, int len)
     修改内容   : 新生成函数
 
 *****************************************************************************/
-u8 drv_Usart1Read(u8 *Buff, u16 len)
+u8 drv_Usart1_Read(u8 *Buff, u16 len)
 {
 
 	u16 RecvLen = 0;
@@ -298,7 +299,7 @@ u8 drv_Usart1Read(u8 *Buff, u16 len)
 
 	while (len--)
 	{
-		if (drv_Usart1RecvOne (tmp) == 1)
+		if (drv_Usart1_RecvOne (tmp) == 1)
 		{
 			Buff[RecvLen++] = tmp[0];
 		}
@@ -468,7 +469,7 @@ again:
 } 
 #endif //UARTprintf end
 
-#endif //usart1 end
+#else
 
 //Private Function Prototype
 static uint32_t drv_Usart1_ReadByte(uint8_t *key);
@@ -495,7 +496,7 @@ static uint32_t drv_Usart1_ReadByte(uint8_t *key)
 
 //USART2 get a byte from HyperTerminal
 //return: Rx byte
-uint8_t drv_Usart1_GetByte(void)
+uint8_t drv_Usart1_RecvOne(void)
 {
   uint8_t key = 0;
 
@@ -624,7 +625,7 @@ void drv_Usart1_Init(int BaudRate)
 	Usart1_DMA2_Config();	
 }
 
-
+#endif
 
 
 

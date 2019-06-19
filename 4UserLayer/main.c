@@ -34,6 +34,8 @@
 //用户层头文件
 #include "test.h"
 #include "iap.h"
+#include "comm.h"
+
 
 
 //任务优先级    
@@ -98,6 +100,8 @@ int main(void)
     drv_TIM6_Init();                //定时器6初始化
     easyflash_init();               //外部FLASH初始化
     CMD_Init();                     //FreeRTOS CLI 注册
+
+    init_serial_boot();
     
 
 	//创建开始任务
@@ -152,7 +156,7 @@ void start_task(void *pvParameters)
 
     //CMD测试任务
     xTaskCreate((TaskFunction_t )vTaskMsgPro,     
-                (const char*    )"vTaskMsgPro",   
+                (const char*    )"cmd",   
                 (uint16_t       )CMD_STK_SIZE, 
                 (void*          )NULL,
                 (UBaseType_t    )CMD_TASK_PRIO,
@@ -228,11 +232,12 @@ void Key_task(void *pvParameters)
 					break;
 				case 3:
 					//ef_print_env();
-					SystemReset();
+					//SystemReset();
 					break;
 				case 4:
                     printf("KEY_DOWN_K4\r\n");
-                    ef_erase_bak_app( 0x10000 ); 
+                    drv_Usart1_SendString("1234");
+                    //ef_erase_bak_app( 0x10000 ); 
                     //RestoreDefaultSetting();
                     //IAP_DownLoadToFlash();
 					break;                
@@ -252,32 +257,12 @@ void Key_task(void *pvParameters)
 
 void vTaskMsgPro(void *pvParameters)
 {
-	uint8_t ucCMD;	
     
     while(1)
     {
-        ucCMD = drv_Usart1_GetByte();
-        
-		switch (ucCMD)
-		{
-			case '1':
-                printf( "接收到串口命令1\r\n");	               
-				break;
-
-			case '2':
-				printf( "接收到串口命令2\r\n");					
-				break;
-
-			case '3':
-				printf( "接收到串口命令3\r\n");				
-				break;
-
-			case '4':
-				printf( "接收到串口命令4\r\n");					
-				break;	
-		}
-	
-		vTaskDelay(20);
+        DealSerialParse();    
+	    DealRxData();
+		vTaskDelay(10);
     }
 }
 

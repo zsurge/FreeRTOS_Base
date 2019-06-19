@@ -36,7 +36,7 @@
 
 
 
-#if 0
+#ifndef IAP_TEST
 
 #include "stdio.h"	
 #include "string.h"
@@ -52,23 +52,23 @@ extern volatile u16 RecvEnd1;
 
 
 
-void drv_Usart1Init (u32 BaudRate);
-void drv_Usart1SendString (const u8 *Buff);
-void drv_Usart1SendData (const u8 *Buff, u16 SendSize);
-void drv_Usart1RecvReset (void);
-u8 drv_Usart1RecvOne (u8 *Str);
-u16 drv_Usart1RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
-u8 drv_Usart1Read(u8 *buf, u16 len);
+void drv_Usart1_Init (u32 BaudRate);
+void drv_Usart1_SendString (const u8 *Buff);
+void drv_Usart1_SendData (const u8 *Buff, u16 SendSize);
+void drv_Usart1_RecvReset (void);
+u8 drv_Usart1_RecvOne (u8 *Str);
+u16 drv_Usart1_RecvAtTime (u8 *Buff, u16 RecvSize, u32 timeout_MilliSeconds);
+u8 drv_Usart1_Read(u8 *buf, u16 len);
 
 //void UARTprintf(const uint8_t *pcString, ...);
-#endif
+#else
 
 
 void drv_Usart1_Init(int BaudRate);
 void drv_Usart1_DMA_Send(uint8_t *buf, uint16_t len);
-uint8_t drv_Usart1_GetByte(void);
+uint8_t drv_Usart1_RecvOne(void);
 
-
+#endif
 
     
 #endif

@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>SMCS_BASE</TargetName>
+      <TargetName>SMCS_BASE_APP</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
@@ -407,10 +407,15 @@
               <FileType>1</FileType>
               <FilePath>..\4UserLayer\iap.c</FilePath>
             </File>
+            <File>
+              <FileName>comm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\4UserLayer\comm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>CommonLayer</GroupName>
+          <GroupName>ComponentLayer</GroupName>
           <Files>
             <File>
               <FileName>delay.c</FileName>
