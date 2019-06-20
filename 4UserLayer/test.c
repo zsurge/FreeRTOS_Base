@@ -20,8 +20,10 @@
 /*----------------------------------------------*
  * 包含头文件                                   *
  *----------------------------------------------*/
-
 #include "test.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 void FlashTest(void)
@@ -147,6 +149,123 @@ void test_env(void)
 
 
 
+
+/* Create a bunch of objects as demonstration. */
+static int print_preallocated(cJSON *root)
+{
+    /* declarations */
+    char *out = NULL;
+    char *buf = NULL;
+    char *buf_fail = NULL;
+    size_t len = 0;
+    size_t len_fail = 0;
+
+    /* formatted print */
+    out = cJSON_Print(root);
+
+    printf("cJSON_Print = %s\r\n",out);
+
+    /* create buffer to succeed */
+    /* the extra 5 bytes are because of inaccuracies when reserving memory */
+    len = strlen(out) + 5;
+    buf = (char*)my_malloc(len);
+    if (buf == NULL)
+    {
+        printf("Failed to allocate memory.\n");
+        exit(1);
+    }
+
+    /* create buffer to fail */
+    len_fail = strlen(out);
+    buf_fail = (char*)my_malloc(len_fail);
+    if (buf_fail == NULL)
+    {
+        printf("Failed to allocate memory.\n");
+        exit(1);
+    }
+
+    /* Print to buffer */
+    if (!cJSON_PrintPreallocated(root, buf, (int)len, 1)) {
+        printf("cJSON_PrintPreallocated failed!\n");
+        if (strcmp(out, buf) != 0) {
+            printf("cJSON_PrintPreallocated not the same as cJSON_Print!\n");
+            printf("cJSON_Print result:\n%s\n", out);
+            printf("cJSON_PrintPreallocated result:\n%s\n", buf);
+        }
+        my_free(out);
+        my_free(buf_fail);
+        my_free(buf);
+        return -1;
+    }
+
+    /* success */
+    printf("%s\n", buf);
+
+    /* force it to fail */
+    if (cJSON_PrintPreallocated(root, buf_fail, (int)len_fail, 1)) {
+        printf("cJSON_PrintPreallocated failed to show error with insufficient memory!\n");
+        printf("cJSON_Print result:\n%s\n", out);
+        printf("cJSON_PrintPreallocated result:\n%s\n", buf_fail);
+        my_free(out);
+        my_free(buf_fail);
+        my_free(buf);
+        return -1;
+    }
+
+    my_free(out);
+    my_free(buf_fail);
+    my_free(buf);
+    return 0;
+}
+
+/* Create a bunch of objects as demonstration. */
+static void create_objects(void)
+{
+    /* declare a few. */
+    cJSON *root = NULL;
+    cJSON *led = NULL; 
+    cJSON *motor = NULL; 
+    int i = 0;
+
+
+    /* Here we construct some JSON standards, from the JSON site. */
+
+    /* Our "Video" datatype: */
+    root = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, "sensor", cJSON_CreateString("01"));
+    cJSON_AddItemToObject(root, "led", led = cJSON_CreateObject());
+    cJSON_AddStringToObject(led, "RRD", "01");
+    cJSON_AddStringToObject(led, "RGN", "00");
+    cJSON_AddStringToObject(led, "LRD", "01");
+    cJSON_AddStringToObject (led, "LGN", "00");
+    cJSON_AddItemToObject(root, "motor", motor = cJSON_CreateObject());
+    cJSON_AddStringToObject(motor, "close", "0106080C00018A69");
+
+
+    /* Print to text */
+    if (print_preallocated(root) != 0) {
+        cJSON_Delete(root);
+        exit(EXIT_FAILURE);
+    }
+    cJSON_Delete(root);
+    my_free(led);
+    my_free(motor);
+
+}
+
+
+
+
+int CJSON_CDECL json_test(void)
+{
+    /* print the version */
+    printf("Version: %s\n", cJSON_Version());
+
+    /* Now some samplecode for building objects concisely: */
+    create_objects();
+
+    return 0;
+}
 
 
 

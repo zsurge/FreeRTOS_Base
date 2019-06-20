@@ -102,6 +102,7 @@ void SystemReset(void)
     //写升级标志位
     if(ef_set_env("UpgradeFlag","1") == EF_NO_ERR)
     {
+        ef_set_env("UserAPPFlag","0");
         //jump iap
         printf("jump iap\r\n");
         NVIC_SystemReset();

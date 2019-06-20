@@ -22,6 +22,9 @@
 //标准库头文件
 #include "stdlib.h"
 
+#include "cJSON.h"
+
+
 //中间层头文件
 #include "sys.h"
 #include "delay.h"
@@ -38,6 +41,8 @@
 #include "drv_time.h"
 #include "drv_led.h"
 #include "drv_key.h"
+
+
 
 
 #define MY_DEBUGF
@@ -57,6 +62,7 @@ void FlashTest(void);
 void test_env(void);
 
 
+int CJSON_CDECL json_test(void);
 
 
 #endif

@@ -194,10 +194,11 @@ void DealRxData(void)
 
                 switch (gcmd.RxdBuf[2])
                 {
-                    case GETSENSOR:
+                    case GETSENSOR:                        
                         printf("recv cmd = A1 \r\n");
-                        SendData(gcmd.RxdBuf[2]);
-                        init_serial_boot();
+                        //SendData(gcmd.RxdBuf[2]);
+                        //init_serial_boot();
+                        SystemReset();
                         break;
                     case SETLED:
                         printf("recv cmd = A2 \r\n");
@@ -356,7 +357,7 @@ void SendData(uint8_t frame_type)
             return;
     }
 
-    dbh(100,TxdBuf,i);
+    dbh(100,(char *)TxdBuf,i);
     drv_Usart1_SendData(TxdBuf,i);
 }
 

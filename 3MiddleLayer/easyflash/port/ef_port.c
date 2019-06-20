@@ -46,6 +46,7 @@ static const ef_env default_env_set[] =
    {"software version",SF_VERSION},
    {"hardware version",HD_VERSION},
    {"UpgradeFlag","0"},
+   {"UserAPPFlag","0"},    
    {"key1","key1_value"},
    {"key2","key2_value"},
    {"key3","key3_value"},
@@ -53,7 +54,7 @@ static const ef_env default_env_set[] =
    {"key5","key5_value"},
    {"key6","key6_value"},
    {"key7","key7_value"},
-   {"key8","key8_value"}    
+   {"key8","key8_value"}   
 };
 
 static char log_buf[128];

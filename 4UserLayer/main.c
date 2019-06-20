@@ -30,7 +30,6 @@
 #include "sfud.h"
 #include "ini.h"
 
-
 //用户层头文件
 #include "test.h"
 #include "iap.h"
@@ -232,7 +231,8 @@ void Key_task(void *pvParameters)
 					break;
 				case 3:
 					//ef_print_env();
-					//SystemReset();
+					SystemReset();
+					//json_test();
 					break;
 				case 4:
                     printf("KEY_DOWN_K4\r\n");
